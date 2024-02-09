@@ -26,7 +26,7 @@ def XOR(msgByte, keyByte):
 
 
 def Encript(message, key):
-    
+
     print("Encrypted Message: ")
     j = 0
 
@@ -35,6 +35,25 @@ def Encript(message, key):
             j = 0
         
         print(bin2int(XOR(str2bin(message).split()[i], str2bin(key).split()[j])), end = "%")
+        j += 1
+
+    print("\n")
+
+def Decrypt(message, key):
+    
+    message = message.split("%")
+    if '' in message:
+        message.remove('')
+    message = list(map(lambda x : format(int(x), '08b'), message))
+
+    print("Decrypted Message: ")
+
+    j = 0
+    for i in range(0, len(message)):
+        if j == len(key):
+            j = 0
+
+        print(chr(bin2int(XOR(message[i], str2bin(key).split()[j]))), end = "")
         j += 1
 
 
