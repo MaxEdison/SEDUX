@@ -55,9 +55,7 @@ def Decrypt(message, key):
 
         print(chr(bin2int(XOR(message[i], str2bin(key).split()[j]))), end = "")
         j += 1
-
-
-
+        
 
 message = input("Enter Message: ")
 key = input("Enter Key: ")
