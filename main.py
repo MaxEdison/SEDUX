@@ -67,4 +67,9 @@ getchar = lambda: sys.stdin.read(1)
 
 match getchar():
     case 'e':
-        pass
+        Encript(message, key)
+    case 'd':
+        Decrypt(message, key)
+    case _:
+        print("Invalid input. Exiting...")
+        exit()
