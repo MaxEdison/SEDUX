@@ -13,8 +13,6 @@ def bin2int(binary):
 
 def XOR(msgByte, keyByte):
     
-
-
     if len(msgByte) != 8 or len(keyByte) != 8 or not all(bit in '01' for bit in msgByte) or not all(bit in '01' for bit in keyByte):
         print("System ERROR [ERR CODE : 9]")
         return 9
@@ -23,8 +21,23 @@ def XOR(msgByte, keyByte):
     value2 = int(keyByte, 2)
 
     result = value1 ^ value2
-    result_binary = format(result, '08b')
-    return result_binary
+    binary = format(result, '08b')
+    return binary
+
+
+def Encript(message, key):
+    
+    print("Encrypted Message: ")
+    j = 0
+
+    for i in range(0, len(message)):
+        if j == len(key):
+            j = 0
+        
+        print(bin2int(XOR(str2bin(message).split()[i], str2bin(key).split()[j])), end = "%")
+        j += 1
+
+
 
 
 message = input("Enter Message: ")
