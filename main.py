@@ -8,6 +8,9 @@ def str2bin(string):
         binary.append(format(ord(char), '08b'))
     return ' '.join(binary)
 
+def bin2int(binary):
+    return int(binary, 2)
+
 
 message = input("Enter Message: ")
 key = input("Enter Key: ")
