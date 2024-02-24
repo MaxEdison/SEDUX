@@ -1,73 +1,60 @@
 import sys
 
-def str2bin(string):
 
-    binary = []
-    
-    for char in string:
-        binary.append(format(ord(char), '08b'))
-    return ' '.join(binary)
+def string_to_binary(string):
+    """Converts a string to binary representation."""
+    return ' '.join(format(ord(char), '08b') for char in string)
 
-def bin2int(binary):
+
+def binary_to_int(binary):
+    """Converts binary representation to integer."""
     return int(binary, 2)
 
-def XOR(msgByte, keyByte):
-    
-    if len(msgByte) != 8 or len(keyByte) != 8 or not all(bit in '01' for bit in msgByte) or not all(bit in '01' for bit in keyByte):
-        print("System ERROR [ERR CODE : 9]")
-        return 9
 
-    value1 = int(msgByte, 2)
-    value2 = int(keyByte, 2)
-
-    result = value1 ^ value2
-    binary = format(result, '08b')
-    return binary
+def xor_bytes(byte1, byte2):
+    """Performs XOR operation on two bytes."""
+    return format(binary_to_int(byte1) ^ binary_to_int(byte2), '08b')
 
 
-def Encript(message, key):
+def encrypt(message, key):
+    """Encrypts the message using the provided key."""
+    key_binary = string_to_binary(key).split()
+    key_len = len(key_binary)
+    encrypted_message = []
 
-    print("Encrypted Message: ")
-    j = 0
+    for i, char in enumerate(message):
+        encrypted_byte = xor_bytes(string_to_binary(char), key_binary[i % key_len])
+        encrypted_message.append(binary_to_int(encrypted_byte))
 
-    for i in range(0, len(message)):
-        if j == len(key):
-            j = 0
-        
-        print(bin2int(XOR(str2bin(message).split()[i], str2bin(key).split()[j])), end = "%")
-        j += 1
+    return "%".join(map(str, encrypted_message))
 
-    print("\n")
 
-def Decrypt(message, key):
-    
-    message = message.split("%")
-    if '' in message:
-        message.remove('')
-    message = list(map(lambda x : format(int(x), '08b'), message))
+def decrypt(message, key):
+    """Decrypts the message using the provided key."""
+    key_binary = string_to_binary(key).split()
+    key_len = len(key_binary)
+    decrypted_message = []
 
-    print("Decrypted Message: ")
+    for i, byte in enumerate(message.split("%")):
+        decrypted_byte = xor_bytes(byte, key_binary[i % key_len])
+        decrypted_message.append(chr(binary_to_int(decrypted_byte)))
 
-    j = 0
-    for i in range(0, len(message)):
-        if j == len(key):
-            j = 0
+    return "".join(decrypted_message)
 
-        print(chr(bin2int(XOR(message[i], str2bin(key).split()[j]))), end = "")
-        j += 1
-        
 
-message = input("Enter Message: ")
-key = input("Enter Key: ")
+if __name__ == "__main__":
+    message = input("Enter Message: ")
+    key = input("Enter Key: ")
 
-print("Encrypt(e) or Decrypt(d) message?")
-getchar = lambda: sys.stdin.read(1)
+    print("Encrypt(e) or Decrypt(d) message?")
+    action = input()
 
-match getchar():
-    case 'e':
-        Encript(message, key)
-    case 'd':
-        Decrypt(message, key)
-    case _:
+    if action == 'e':
+        print("Encrypted Message:")
+        print(encrypt(message, key))
+    elif action == 'd':
+        print("Decrypted Message:")
+        print(decrypt(message, key))
+    else:
         print("Invalid input. Exiting...")
-        exit()
+        sys.exit()
